@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Itaú</title>
+
+  <!-- PWA & iOS Home Screen Configuration -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#FE5301" id="meta-theme-color" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Itaú" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="desktop-stage">
+    <!-- Main Mobile Viewport -->
+    <div class="phone-viewport">
+
+      <!-- Simulated iOS Status Bar (Shown only on Desktop preview; hidden on real mobile devices) -->
+      <header class="ios-status-bar theme-light-text" id="ios-status-bar">
+        <div class="status-left">
+          <span id="status-time">22:33</span>
+          <span id="status-loc-icon" class="status-loc-arrow">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" transform="rotate(45 12 12)"/>
+            </svg>
+          </span>
+        </div>
+        <div class="status-right">
+          <!-- Signal Dots -->
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor">
+            <rect x="0" y="6" width="3" height="3" rx="1"/>
+            <rect x="4.5" y="4" width="3" height="5" rx="1"/>
+            <rect x="9" y="2" width="3" height="7" rx="1" opacity="0.35"/>
+            <rect x="13.5" y="0" width="3" height="9" rx="1" opacity="0.35"/>
+            <rect x="0" y="10" width="3" height="2" rx="0.8"/>
+            <rect x="4.5" y="10" width="3" height="2" rx="0.8"/>
+            <rect x="9" y="10" width="3" height="2" rx="0.8" opacity="0.35"/>
+            <rect x="13.5" y="10" width="3" height="2" rx="0.8" opacity="0.35"/>
+          </svg>
+          <!-- Wi-Fi -->
+          <svg width="15" height="12" viewBox="0 0 16 12" fill="currentColor">
+            <path d="M8 9.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.6-1.8a5.2 5.2 0 0 1 7.2 0l1.2-1.2a6.9 6.9 0 0 0-9.6 0l1.2 1.2zm-2.6-2.6a8.9 8.9 0 0 1 12.4 0l1.2-1.2a10.6 10.6 0 0 0-14.8 0l1.2 1.2z"/>
+          </svg>
+          <!-- 100% Battery -->
+          <span class="battery-pill">100</span>
+        </div>
+      </header>
+
+      <!-- =====================================================
+           1. SPLASH SCREEN
+           ===================================================== -->
+      <section class="screen-view active" id="screen-splash" onclick="showPreLogin()">
+        <div class="splash-logo-wrap">
+          <img src="assets/itau-squircle.png" alt="Itaú" />
+        </div>
+        <div class="ios-home-indicator-wrap" style="position:absolute;bottom:4px;">
+          <div class="ios-home-indicator light"></div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           2 & 3. PRIMEIRA TELA APP (PRE-LOGIN) + FACE ID MODAL
+           ===================================================== -->
+      <section class="screen-view" id="screen-prelogin">
+        <div class="prelogin-content">
+          <!-- Top User Row -->
+          <div class="prelogin-header">
+            <div class="prelogin-user">
+              <div class="avatar-circle-dark" id="ui-prelogin-initials">JO</div>
+              <div class="prelogin-user-info">
+                <h2 id="ui-prelogin-greeting">Olá, John</h2>
+                <p id="ui-prelogin-account">Ag ••16 Conta •••07-7</p>
+              </div>
+            </div>
+            <button type="button" class="btn-trocar-conta">Trocar conta</button>
+          </div>
+
+          <!-- Main Card: Acessar (Tap = Face ID | Hold = Painel de Edição) -->
+          <div class="prelogin-card-acessar" id="btn-acessar-card">
+            <div class="prelogin-card-icon">
+              <!-- Orange Padlock Icon -->
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="12" width="16" height="12" rx="3.5" />
+                <line x1="6" y1="16" x2="22" y2="16" />
+                <path d="M9.5 12V9a4.5 4.5 0 0 1 9 0v3" />
+                <line x1="14" y1="19" x2="14" y2="20.8" />
+              </svg>
+            </div>
+            <span class="prelogin-card-label">Acessar</span>
+          </div>
+
+          <!-- 2x2 Grid -->
+          <div class="prelogin-grid-2x2">
+            <!-- Pix e transferir -->
+            <div class="prelogin-grid-card" onclick="triggerFaceID('home')">
+              <div>
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="6" y1="11" x2="21" y2="11" />
+                  <polyline points="16.5 6.5 21 11 16.5 15.5" />
+                  <line x1="21" y1="17" x2="6" y2="17" />
+                  <polyline points="10.5 12.5 6 17 10.5 21.5" />
+                </svg>
+              </div>
+              <span class="prelogin-card-label">Pix e transferir</span>
+            </div>
+
+            <!-- Pagar -->
+            <div class="prelogin-grid-card" onclick="triggerFaceID('pagamentos')">
+              <div>
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round">
+                  <line x1="6" y1="6" x2="6" y2="21" />
+                  <line x1="10" y1="6" x2="10" y2="17" />
+                  <line x1="14" y1="6" x2="14" y2="17" />
+                  <line x1="18" y1="6" x2="18" y2="17" />
+                  <line x1="22" y1="6" x2="22" y2="21" />
+                </svg>
+              </div>
+              <span class="prelogin-card-label">Pagar</span>
+            </div>
+
+            <!-- Extrato -->
+            <div class="prelogin-grid-card" onclick="triggerFaceID('extrato')">
+              <div>
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round">
+                  <circle cx="7" cy="8" r="1" fill="#FF6201" stroke="none"/>
+                  <circle cx="7" cy="14" r="1" fill="#FF6201" stroke="none"/>
+                  <circle cx="7" cy="20" r="1" fill="#FF6201" stroke="none"/>
+                  <line x1="11" y1="8" x2="21" y2="8" />
+                  <line x1="11" y1="14" x2="21" y2="14" />
+                  <line x1="11" y1="20" x2="21" y2="20" />
+                </svg>
+              </div>
+              <span class="prelogin-card-label">Extrato</span>
+            </div>
+
+            <!-- Cartão virtual -->
+            <div class="prelogin-grid-card" onclick="triggerFaceID('home')">
+              <div>
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 7H8a2.5 2.5 0 0 0-2.5 2.5v9A2.5 2.5 0 0 0 8 21h6" />
+                  <path d="M14 7h6a2.5 2.5 0 0 1 2.5 2.5v9A2.5 2.5 0 0 1 20 21h-6" stroke-dasharray="2.2 2.8" />
+                  <line x1="9" y1="12" x2="11" y2="12" />
+                </svg>
+              </div>
+              <span class="prelogin-card-label">Cartão virtual</span>
+            </div>
+          </div>
+
+          <!-- 3-Column Bottom Grid -->
+          <div class="prelogin-grid-3col">
+            <!-- Área Pix -->
+            <div class="prelogin-small-card" onclick="triggerFaceID('home')">
+              <div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6201" stroke-width="1.7" stroke-linejoin="round">
+                  <path d="M12 3L16 7L12 11L8 7L12 3Z" />
+                  <path d="M17 8L21 12L17 16L13 12L17 8Z" />
+                  <path d="M7 8L11 12L7 16L3 12L7 8Z" />
+                  <path d="M12 13L16 17L12 21L8 17L12 13Z" />
+                </svg>
+              </div>
+              <span class="prelogin-card-label">Área Pix</span>
+            </div>
+
+            <!-- iToken -->
+            <div class="prelogin-small-card" onclick="triggerFaceID('home')">
+              <div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6201" stroke-width="1.7">
+                  <ellipse cx="12" cy="12" rx="7.5" ry="5.5" />
+                  <rect x="8.5" y="10.5" width="6" height="3" rx="1.5" />
+                  <circle cx="17" cy="12" r="0.8" fill="#FF6201" stroke="none" />
+                </svg>
+              </div>
+              <span class="prelogin-card-label">iToken</span>
+            </div>
+
+            <!-- Ajuda -->
+            <div class="prelogin-small-card" onclick="triggerFaceID('home')">
+              <div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6201" stroke-width="1.7" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="8" />
+                  <path d="M10.2 10a2 2 0 1 1 2.6 1.9c-.5.2-.8.6-.8 1.1v.5" />
+                  <circle cx="12" cy="16.2" r="0.8" fill="#FF6201" stroke="none" />
+                </svg>
+              </div>
+              <span class="prelogin-card-label">Ajuda</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Face ID Modal Overlay -->
+        <div class="faceid-overlay" id="faceid-overlay">
+          <div class="faceid-box">
+            <div class="faceid-orb-container">
+              <img src="assets/faceid-orb.png" alt="Face ID" />
+              <div class="faceid-ring-anim"></div>
+            </div>
+            <span class="faceid-label">Face ID</span>
+          </div>
+        </div>
+
+        <div class="ios-home-indicator-wrap">
+          <div class="ios-home-indicator"></div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           PAINEL DE EDIÇÃO SECRETO (AO SEGURAR EM "ACESSAR")
+           ===================================================== -->
+      <div class="admin-modal-backdrop" id="admin-modal">
+        <div class="admin-modal-sheet">
+          <div class="admin-modal-header">
+            <div>
+              <h3>Configurar Dados do App</h3>
+              <p>Altere saldos, limites, cartões e extrato</p>
+            </div>
+            <button type="button" class="admin-close-btn" onclick="closeAdminModal()">✕</button>
+          </div>
+
+          <div class="admin-modal-body">
+            <!-- Seção 1: Perfil e Conta -->
+            <div class="admin-section">
+              <h4>1. Titular e Conta</h4>
+              <div class="admin-row-2col">
+                <div class="admin-field">
+                  <label>Nome (Olá, ...)</label>
+                  <input type="text" id="cfg-userName" placeholder="John" />
+                </div>
+                <div class="admin-field">
+                  <label>Iniciais Avatar</label>
+                  <input type="text" id="cfg-userInitials" maxlength="3" placeholder="JO" />
+                </div>
+              </div>
+              <div class="admin-row-2col">
+                <div class="admin-field">
+                  <label>Agência e Conta</label>
+                  <input type="text" id="cfg-accountLabel" placeholder="Ag ••16 Conta •••07-7" />
+                </div>
+                <div class="admin-field">
+                  <label>Nível Vantagens</label>
+                  <input type="text" id="cfg-nivelLabel" placeholder="Nível 5" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Seção 2: Saldo e Limite da Conta -->
+            <div class="admin-section">
+              <h4>2. Conta Corrente (Home e Extrato)</h4>
+              <div class="admin-row-2col">
+                <div class="admin-field">
+                  <label>Saldo da Conta</label>
+                  <input type="text" id="cfg-accountBalance" placeholder="R$ 1.662,01" />
+                </div>
+                <div class="admin-field">
+                  <label>Limite Disponível</label>
+                  <input type="text" id="cfg-accountLimit" placeholder="R$ 400,00" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Seção 3: Cartão de Crédito -->
+            <div class="admin-section">
+              <h4>3. Cartão de Crédito (Home)</h4>
+              <div class="admin-field">
+                <label>Nome e Final do Cartão</label>
+                <input type="text" id="cfg-cardName" placeholder="Itau Multiplo Gold final 7347" />
+              </div>
+              <div class="admin-row-2col">
+                <div class="admin-field">
+                  <label>Fatura Aberta</label>
+                  <input type="text" id="cfg-cardInvoice" placeholder="R$ 0,00" />
+                </div>
+                <div class="admin-field">
+                  <label>Limite Disponível</label>
+                  <input type="text" id="cfg-cardLimit" placeholder="R$ 200,00" />
+                </div>
+              </div>
+              <div class="admin-field">
+                <label>Texto Melhor Data de Compras</label>
+                <input type="text" id="cfg-cardBestDate" placeholder="Melhor data de compras: 03 dez" />
+              </div>
+            </div>
+
+            <!-- Seção 4: Aba Pagamentos -->
+            <div class="admin-section">
+              <h4>4. Aba Pagamentos</h4>
+              <div class="admin-row-2col">
+                <div class="admin-field">
+                  <label>Total Previsto</label>
+                  <input type="text" id="cfg-payTotal" placeholder="R$ 430,25" />
+                </div>
+                <div class="admin-field">
+                  <label>Vencidos</label>
+                  <input type="text" id="cfg-payOverdue" placeholder="R$ 0,00" />
+                </div>
+              </div>
+              <div class="admin-row-3col">
+                <div class="admin-field">
+                  <label>A Vencer</label>
+                  <input type="text" id="cfg-payUpcoming" placeholder="R$ 430,25" />
+                </div>
+                <div class="admin-field">
+                  <label>Qtd. Boletos</label>
+                  <input type="text" id="cfg-payBadge" placeholder="4" />
+                </div>
+                <div class="admin-field">
+                  <label>Agendados</label>
+                  <input type="text" id="cfg-payScheduled" placeholder="R$ 0,00" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Seção 5: Lançamentos do Extrato -->
+            <div class="admin-section">
+              <div class="admin-section-header">
+                <h4>5. Lançamentos do Extrato</h4>
+                <button type="button" class="btn-add-tx" onclick="addAdminTxRow()">+ Adicionar</button>
+              </div>
+              <div class="admin-field">
+                <label>Data do Grupo de Lançamentos</label>
+                <input type="text" id="cfg-txDate" placeholder="09 de novembro de 2026" />
+              </div>
+              <div id="admin-tx-list" class="admin-tx-list"></div>
+            </div>
+          </div>
+
+          <div class="admin-modal-footer">
+            <button type="button" class="btn-admin-reset" onclick="resetAppConfig()">Restaurar Padrão</button>
+            <button type="button" class="btn-admin-save" onclick="saveAppConfig()">Salvar Alterações</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           LOGGED-IN APP SHELL
+           ===================================================== -->
+      <section class="screen-view" id="screen-app">
+
+        <!-- ===================================================
+             TAB 1: HOME (INÍCIO) - PART 1, 2 & 3
+             =================================================== -->
+        <div class="tab-pane active" id="tab-home">
+          <!-- Fixed Orange Header -->
+          <div class="home-top-bar">
+            <div class="home-top-left">
+              <div class="avatar-circle-white" id="ui-home-initials" onclick="showPreLogin()" title="Voltar para login">JO</div>
+              <div class="nivel-pill" onclick="switchAppTab('pravc')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF">
+                  <path d="M12 1.5l2.6 1.6 3-.3 1.3 2.7 2.7 1.3-.3 3 1.6 2.6-1.6 2.6.3 3-2.7 1.3-1.3 2.7-3-.3-2.6 1.6-2.6-1.6-3 .3-1.3-2.7-2.7-1.3.3-3L1.1 12l1.6-2.6-.3-3 2.7-1.3 1.3-2.7 3 .3L12 1.5z"/>
+                  <text x="12" y="16" text-anchor="middle" fill="#FF6201" font-size="11" font-weight="800" font-family="sans-serif">5</text>
+                </svg>
+                <span id="ui-home-nivel">Nível 5</span>
+              </div>
+            </div>
+            <div class="home-top-right">
+              <!-- Search -->
+              <button type="button" class="icon-btn" onclick="switchAppTab('menu')" aria-label="Buscar">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="20" y1="20" x2="16.2" y2="16.2" />
+                </svg>
+              </button>
+              <!-- Bell with red dot -->
+              <button type="button" class="icon-btn" aria-label="Notificações">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                </svg>
+                <span class="notif-dot"></span>
+              </button>
+              <!-- Chat -->
+              <button type="button" class="icon-btn" aria-label="Chat">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+                  <path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H8l-4 3V6a1 1 0 0 1 1-1z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Scrollable Content (Part 1, Part 2, Part 3) -->
+          <div class="tab-scroll" id="home-scroll">
+            <!-- Hero Orange Banner -->
+            <div class="home-hero-banner">
+              <p>Com o parcelamento de fatura, você organiza o mês e mantém as contas em dia</p>
+              <button type="button" class="btn-parcelar">Parcelar fatura</button>
+            </div>
+
+            <!-- Rounded Gray Sheet -->
+            <div class="home-sheet">
+              <div class="sheet-sticky-top">
+                <div class="sheet-handle"></div>
+              </div>
+
+              <!-- Meu Itaú + Eye icon -->
+              <div class="section-header-row">
+                <h3>Meu Itaú</h3>
+                <button type="button" class="icon-btn" onclick="toggleBalancesVisibility()" aria-label="Ocultar valores">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.8">
+                    <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Horizontal Quick Actions -->
+              <div class="quick-actions-scroll">
+                <div class="quick-action-item">
+                  <div class="quick-action-box">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7" stroke-linejoin="round">
+                      <path d="M12 3L16 7L12 11L8 7L12 3Z" />
+                      <path d="M17 8L21 12L17 16L13 12L17 8Z" />
+                      <path d="M7 8L11 12L7 16L3 12L7 8Z" />
+                      <path d="M12 13L16 17L12 21L8 17L12 13Z" />
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Pix e<br/>transferir</span>
+                </div>
+
+                <div class="quick-action-item" onclick="switchAppTab('pagamentos')">
+                  <div class="quick-action-box">
+                    <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="#1C1C1E" stroke-width="1.9" stroke-linecap="round">
+                      <line x1="6" y1="6" x2="6" y2="21" />
+                      <line x1="10" y1="6" x2="10" y2="17" />
+                      <line x1="14" y1="6" x2="14" y2="17" />
+                      <line x1="18" y1="6" x2="18" y2="17" />
+                      <line x1="22" y1="6" x2="22" y2="21" />
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Pagar</span>
+                </div>
+
+                <div class="quick-action-item">
+                  <div class="quick-action-box">
+                    <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="#1C1C1E" stroke-width="1.8" stroke-linecap="round">
+                      <path d="M14 7H8a2.5 2.5 0 0 0-2.5 2.5v9A2.5 2.5 0 0 0 8 21h6" />
+                      <path d="M14 7h6a2.5 2.5 0 0 1 2.5 2.5v9A2.5 2.5 0 0 1 20 21h-6" stroke-dasharray="2.2 2.8" />
+                      <line x1="9" y1="12" x2="11" y2="12" />
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Cartão<br/>virtual</span>
+                </div>
+
+                <div class="quick-action-item">
+                  <div class="quick-action-box">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                      <circle cx="12" cy="12" r="8" stroke-dasharray="12 3 8 3" />
+                      <circle cx="12" cy="12" r="4.5" />
+                      <line x1="12" y1="4" x2="12" y2="7.5" />
+                      <line x1="5" y1="15" x2="8" y2="13.5" />
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Conectar<br/>Contas</span>
+                </div>
+
+                <div class="quick-action-item">
+                  <div class="quick-action-box">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                      <rect x="4" y="4" width="16" height="16" rx="3" />
+                      <circle cx="12" cy="11" r="1.3" fill="#1C1C1E" />
+                      <line x1="12" y1="12" x2="12" y2="15" />
+                      <line x1="7" y1="20" x2="7" y2="22" />
+                      <line x1="17" y1="20" x2="17" y2="22" />
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Cofrinho</span>
+                </div>
+              </div>
+
+              <!-- Cards Stack (Home Part 1, 2 & 3) -->
+              <div class="home-cards-stack">
+
+                <!-- Card 1: Conta corrente -->
+                <div class="app-white-card" onclick="switchAppTab('extrato')">
+                  <div class="card-top-row">
+                    <div class="card-title-left">
+                      <img src="assets/itau-small-white.png" alt="Itaú" class="itau-mini-icon" />
+                      <span>Conta corrente</span>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2C2C2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 6 15 12 9 18" />
+                    </svg>
+                  </div>
+
+                  <div class="card-balance-label">Saldo</div>
+                  <div class="card-balance-value monetary-val" id="ui-home-balance" data-real="R$ 1.662,01">R$ 1.662,01</div>
+
+                  <div class="card-divider"></div>
+
+                  <div class="card-bottom-row">
+                    <span>Limite disponível</span>
+                    <div class="card-bottom-right">
+                      <span class="monetary-val" id="ui-home-limit" data-real="R$ 400,00">R$ 400,00</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C2C2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 6 15 12 9 18" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 2: Cartão de Crédito -->
+                <div class="app-white-card" id="home-part2-anchor">
+                  <div class="card-top-row">
+                    <div class="card-title-left">
+                      <div class="mc-mini-card">
+                        <span class="mc-circle-red"></span>
+                        <span class="mc-circle-orange"></span>
+                      </div>
+                      <span id="ui-card-name">Itau Multiplo Gold final 7347</span>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2C2C2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 6 15 12 9 18" />
+                    </svg>
+                  </div>
+
+                  <div class="card-balance-label">Fatura aberta</div>
+                  <div class="card-balance-value monetary-val" id="ui-card-invoice" data-real="R$ 0,00">R$ 0,00</div>
+                  <div class="card-sub-bold" id="ui-card-bestdate">Melhor data de compras: 03 dez</div>
+
+                  <div class="card-divider"></div>
+
+                  <div class="card-bottom-row">
+                    <span>Limite disponível</span>
+                    <div class="card-bottom-right">
+                      <span class="monetary-val" id="ui-card-limit" data-real="R$ 200,00">R$ 200,00</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mostrar outro cartão -->
+                <div class="mostrar-outro-cartao">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C2C2E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="7" width="14" height="11" rx="2" />
+                    <path d="M13 4h6a2 2 0 0 1 2 2v6" />
+                    <polyline points="11 6 13 4 11 2" />
+                    <line x1="6" y1="11" x2="8" y2="11" />
+                  </svg>
+                  <span>Mostrar outro cartão</span>
+                </div>
+
+                <!-- Card 3: Investimentos -->
+                <div class="app-white-card">
+                  <div class="card-top-row">
+                    <div class="card-title-left">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C2C2E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 15 9 10 13 13 20 6" />
+                        <line x1="4" y1="19" x2="20" y2="19" />
+                      </svg>
+                      <span>Investimentos</span>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2C2C2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 6 15 12 9 18" />
+                    </svg>
+                  </div>
+                  <p class="card-desc-text">Guarde seu dinheiro em Cofrinhos que rendem todo dia útil.</p>
+                </div>
+
+                <!-- Card 4: Crédito -->
+                <div class="app-white-card">
+                  <div class="card-top-row">
+                    <div class="card-title-left">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C2C2E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" />
+                        <path d="M11 10.5c-.8-.6-2.5-.3-2.5.8 0 1.3 3 1.1 3 2.5 0 1.1-1.7 1.3-2.6.7M10 9v6" />
+                        <line x1="18" y1="3" x2="18" y2="9" />
+                        <line x1="15" y1="6" x2="21" y2="6" />
+                      </svg>
+                      <span>Crédito</span>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2C2C2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 6 15 12 9 18" />
+                    </svg>
+                  </div>
+                  <p class="card-desc-text">Conheça as opções de crédito e acesse seus produtos contratados.</p>
+                </div>
+
+                <!-- Dark Navy 2x2 Grid (Part 3) -->
+                <div class="navy-grid-2x2" id="home-part3-anchor">
+                  <div class="navy-card">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z" />
+                    </svg>
+                    <span class="navy-card-title">Seguros</span>
+                  </div>
+                  <div class="navy-card">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round">
+                      <circle cx="12" cy="12" r="8" stroke-dasharray="12 3 8 3" />
+                      <circle cx="12" cy="12" r="4" />
+                    </svg>
+                    <span class="navy-card-title">Open Finance</span>
+                  </div>
+
+                  <div class="navy-card">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M10 9.8a2.1 2.1 0 1 1 2.8 2c-.6.3-.8.7-.8 1.2v.6" />
+                      <circle cx="12" cy="16.5" r="0.9" fill="#FFFFFF" stroke="none" />
+                    </svg>
+                    <span class="navy-card-title">Ajuda</span>
+                  </div>
+
+                  <div class="navy-card">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M6 10V6a2 2 0 0 1 2-2h8" />
+                      <polyline points="4 8 6 10 8 8" />
+                      <path d="M18 14v4a2 2 0 0 1-2 2H8" />
+                      <polyline points="20 16 18 14 16 16" />
+                      <path d="M13.5 9.8c-.8-.6-3-.4-3 .9 0 1.4 3.2 1.2 3.2 2.7 0 1.2-2.2 1.4-3.1.8M12 8v8" />
+                    </svg>
+                    <span class="navy-card-title">Câmbio</span>
+                  </div>
+                </div>
+
+                <!-- Card 5: Queremos saber a sua opinião -->
+                <div class="feedback-card">
+                  <h4>Queremos saber a sua opinião (opcional)</h4>
+                  <p>O que você achou da experiência da sua tela inicial?</p>
+
+                  <div class="emoji-rating-row">
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                      <img src="assets/emoji-1.png" alt="Muito ruim" />
+                      <span>Muito<br/>ruim</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                      <img src="assets/emoji-2.png" alt="Ruim" />
+                      <span>Ruim</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                      <img src="assets/emoji-3.png" alt="Regular" />
+                      <span>Regular</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                      <img src="assets/emoji-4.png" alt="Boa" />
+                      <span>Boa</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                      <img src="assets/emoji-5.png" alt="Muito boa" />
+                      <span>Muito<br/>boa</span>
+                    </div>
+                  </div>
+
+                  <div class="feedback-input-wrap">
+                    <input
+                      type="text"
+                      class="feedback-input"
+                      placeholder="Quer fazer um comentário? (opcional)"
+                      maxlength="140"
+                      oninput="updateFeedbackCount(this)"
+                    />
+                    <div class="feedback-counter" id="feedback-counter">0/140</div>
+                  </div>
+
+                  <button type="button" class="btn-enviar-avaliacao" id="btn-enviar-avaliacao">
+                    Enviar avaliação
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================
+             TAB 2: EXTRATO (PART 1 & 2)
+             =================================================== -->
+        <div class="tab-pane" id="tab-extrato">
+          <div class="top-simple-bar">
+            <span class="top-simple-title">Extrato</span>
+            <div class="top-simple-icons">
+              <button type="button" class="icon-btn" onclick="toggleBalancesVisibility()">
+                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.8">
+                  <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+              <button type="button" class="icon-btn">
+                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.8">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M10.2 9.8a2 2 0 1 1 2.6 1.9c-.5.2-.8.6-.8 1.1v.5" />
+                  <circle cx="12" cy="16.2" r="0.8" fill="#1C1C1E" stroke="none" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="tab-scroll" id="extrato-scroll">
+            <div class="extrato-balance-area">
+              <div class="extrato-balance-label">Saldo da conta</div>
+              <div class="extrato-balance-row">
+                <span class="extrato-balance-val monetary-val" id="ui-extrato-balance" data-real="R$ 1.662,01">R$ 1.662,01</span>
+                <div class="shield-btn-circle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6201" stroke-width="1.8">
+                    <path d="M12 3l7 3v5c0 4.5-3 8-7 9.5-4-1.5-7-5-7-9.5V6l7-3z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3 List Rows -->
+            <div class="extrato-links-list">
+              <div class="extrato-link-row">
+                <div class="extrato-link-left">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                    <rect x="3" y="4" width="18" height="7" rx="2" />
+                    <line x1="12" y1="4" x2="12" y2="11" />
+                    <polygon points="12 14 9 19 15 19" />
+                  </svg>
+                  <span>Limite disponível</span>
+                </div>
+                <div class="extrato-link-right">
+                  <span class="monetary-val" id="ui-extrato-limit" data-real="R$ 400,00">R$ 400,00</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A3A3C" stroke-width="1.8"><polyline points="9 6 15 12 9 18"/></svg>
+                </div>
+              </div>
+
+              <div class="extrato-link-row">
+                <div class="extrato-link-left">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                    <circle cx="12" cy="12" r="8" stroke-dasharray="12 3 8 3" />
+                    <circle cx="12" cy="12" r="4.5" />
+                  </svg>
+                  <span>Outros bancos</span>
+                </div>
+                <div class="extrato-link-right">
+                  <span>Conectar saldos</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A3A3C" stroke-width="1.8"><polyline points="9 6 15 12 9 18"/></svg>
+                </div>
+              </div>
+
+              <div class="extrato-link-row">
+                <div class="extrato-link-left">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                    <rect x="4" y="4" width="16" height="16" rx="3" />
+                    <circle cx="12" cy="11" r="1.2" fill="#1C1C1E" />
+                    <line x1="12" y1="12" x2="12" y2="15" />
+                  </svg>
+                  <span>Cofrinhos</span>
+                </div>
+                <div class="extrato-link-right">
+                  <span>Acessar</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A3A3C" stroke-width="1.8"><polyline points="9 6 15 12 9 18"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Horizontal Quick Actions in Extrato -->
+            <div class="quick-actions-scroll">
+              <div class="quick-action-item">
+                <div class="quick-action-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7" stroke-linejoin="round">
+                    <path d="M12 3L16 7L12 11L8 7L12 3Z"/><path d="M17 8L21 12L17 16L13 12L17 8Z"/><path d="M7 8L11 12L7 16L3 12L7 8Z"/><path d="M12 13L16 17L12 21L8 17L12 13Z"/>
+                  </svg>
+                </div>
+                <span class="quick-action-label">Pix e<br/>transferir</span>
+              </div>
+
+              <div class="quick-action-item">
+                <div class="quick-action-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                    <path d="M12 2l2.4 2.2 3.2-.4.8 3.1 2.8 1.6-1.3 2.9 1.3 2.9-2.8 1.6-.8 3.1-3.2-.4L12 21l-2.4-2.2-3.2.4-.8-3.1-2.8-1.6 1.3-2.9-1.3-2.9 2.8-1.6.8-3.1 3.2.4L12 2z"/>
+                    <line x1="9.5" y1="14.5" x2="14.5" y2="9.5"/>
+                    <circle cx="9.5" cy="9.5" r="1" fill="#1C1C1E"/>
+                    <circle cx="14.5" cy="14.5" r="1" fill="#1C1C1E"/>
+                  </svg>
+                </div>
+                <span class="quick-action-label">Combinaqu<br/>i</span>
+              </div>
+
+              <div class="quick-action-item">
+                <div class="quick-action-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                    <rect x="3" y="6" width="18" height="13" rx="2.5" />
+                    <line x1="6.5" y1="10.5" x2="9" y2="10.5" />
+                  </svg>
+                </div>
+                <span class="quick-action-label">Cartões</span>
+              </div>
+
+              <div class="quick-action-item">
+                <div class="quick-action-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                    <rect x="3" y="7" width="18" height="10" rx="2" />
+                    <circle cx="12" cy="12" r="2" />
+                  </svg>
+                </div>
+                <span class="quick-action-label">Controle<br/>de Gastos</span>
+              </div>
+
+              <div class="quick-action-item">
+                <div class="quick-action-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                    <path d="M5 4h14M6 4v15a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4" />
+                    <line x1="9" y1="9" x2="15" y2="9" />
+                    <line x1="9" y1="13" x2="15" y2="13" />
+                  </svg>
+                </div>
+                <span class="quick-action-label">Compro-<br/>vantes</span>
+              </div>
+            </div>
+
+            <!-- White Sheet: Lançamentos -->
+            <div class="lancamentos-sheet" id="extrato-part2-anchor">
+              <div class="lancamentos-header">
+                <h3>Lançamentos</h3>
+                <div class="lancamentos-header-icons">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.8" stroke-linecap="round">
+                    <line x1="12" y1="4" x2="12" y2="16" />
+                    <polyline points="8 12 12 16 16 12" />
+                    <line x1="6" y1="20" x2="18" y2="20" />
+                  </svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.8" stroke-linecap="round">
+                    <circle cx="11" cy="11" r="7" />
+                    <line x1="20" y1="20" x2="16.2" y2="16.2" />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="lancamentos-sticky-controls">
+                <div class="underline-tabs">
+                  <button type="button" class="underline-tab active">Recentes</button>
+                  <button type="button" class="underline-tab">Futuros</button>
+                </div>
+
+                <div class="filter-pills-row">
+                  <button type="button" class="filter-pill">
+                    <span>Período</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <button type="button" class="filter-pill">
+                    <span>Entradas e saídas</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <button type="button" class="filter-pill">
+                    <span>Mais recentes</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="tx-date-header" id="ui-tx-date">09 de novembro de 2026</div>
+
+              <div class="tx-list" id="ui-tx-list">
+                <!-- Populated dynamically by app.js -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================
+             TAB 3: PAGAMENTOS
+             =================================================== -->
+        <div class="tab-pane" id="tab-pagamentos">
+          <div class="top-simple-bar">
+            <span></span>
+            <div class="top-simple-icons">
+              <button type="button" class="icon-btn" onclick="toggleBalancesVisibility()">
+                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.8">
+                  <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+              <button type="button" class="icon-btn">
+                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.8">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M10.2 9.8a2 2 0 1 1 2.6 1.9c-.5.2-.8.6-.8 1.1v.5" />
+                  <circle cx="12" cy="16.2" r="0.8" fill="#1C1C1E" stroke="none" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="tab-scroll">
+            <div class="pagamentos-container">
+              <div class="underline-tabs" style="margin-bottom:0;">
+                <button type="button" class="underline-tab active" style="color:#48484A;font-weight:500;">Novembro</button>
+                <button type="button" class="underline-tab" style="color:#48484A;">Dezembro</button>
+              </div>
+
+              <div class="pagamentos-sub">Meus compromissos</div>
+
+              <h2 class="pagamentos-headline">
+                Você tem <span class="monetary-val" id="ui-pay-total" data-real="R$ 430,25">R$ 430,25</span> em pagamentos previstos para novembro
+              </h2>
+
+              <div class="compromissos-list">
+                <!-- Vencidos -->
+                <div class="compromisso-row">
+                  <div class="compromisso-left">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#48484A" stroke-width="1.7" stroke-linejoin="round">
+                      <path d="M10.3 4.5a2 2 0 0 1 3.4 0l6.5 11.5a2 2 0 0 1-1.7 3H5.5a2 2 0 0 1-1.7-3l6.5-11.5z"/>
+                      <line x1="12" y1="9.5" x2="12" y2="13.5"/>
+                      <circle cx="12" cy="16" r="0.8" fill="#48484A" stroke="none"/>
+                    </svg>
+                    <div class="compromisso-info">
+                      <span>Vencidos</span>
+                      <strong class="monetary-val" id="ui-pay-overdue" data-real="R$ 0,00">R$ 0,00</strong>
+                    </div>
+                  </div>
+                  <div class="compromisso-right">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A3A3C" stroke-width="1.8"><polyline points="9 6 15 12 9 18"/></svg>
+                  </div>
+                </div>
+
+                <!-- A vencer -->
+                <div class="compromisso-row">
+                  <div class="compromisso-left">
+                    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#48484A" stroke-width="1.8" stroke-linecap="round">
+                      <line x1="6" y1="7" x2="6" y2="21"/>
+                      <line x1="10" y1="7" x2="10" y2="17"/>
+                      <line x1="14" y1="7" x2="14" y2="17"/>
+                      <line x1="18" y1="7" x2="18" y2="17"/>
+                      <line x1="22" y1="7" x2="22" y2="21"/>
+                    </svg>
+                    <div class="compromisso-info">
+                      <span>A vencer</span>
+                      <strong class="monetary-val" id="ui-pay-upcoming" data-real="R$ 430,25">R$ 430,25</strong>
+                    </div>
+                  </div>
+                  <div class="compromisso-right">
+                    <span class="yellow-count-badge" id="ui-pay-badge">4</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A3A3C" stroke-width="1.8"><polyline points="9 6 15 12 9 18"/></svg>
+                  </div>
+                </div>
+
+                <!-- Agendados -->
+                <div class="compromisso-row">
+                  <div class="compromisso-left">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#48484A" stroke-width="1.7">
+                      <rect x="4" y="5" width="16" height="15" rx="2.5"/>
+                      <line x1="8" y1="3" x2="8" y2="6.5"/>
+                      <line x1="16" y1="3" x2="16" y2="6.5"/>
+                      <line x1="4" y1="10" x2="20" y2="10"/>
+                      <line x1="14" y1="14" x2="17" y2="14"/>
+                    </svg>
+                    <div class="compromisso-info">
+                      <span>Agendados</span>
+                      <strong class="monetary-val" id="ui-pay-scheduled" data-real="R$ 0,00">R$ 0,00</strong>
+                    </div>
+                  </div>
+                  <div class="compromisso-right">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A3A3C" stroke-width="1.8"><polyline points="9 6 15 12 9 18"/></svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="busca-boletos-row">
+                <span>Busca de boletos</span>
+                <strong>ativada</strong>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+              </div>
+
+              <!-- Manutenção Card -->
+              <div class="manutencao-card">
+                <div style="flex-shrink:0;">
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 6l12 12M18 6L6 18" />
+                    <circle cx="7" cy="7" r="2.5" />
+                    <path d="M19 16l4 1.5v3.5c0 2.2-1.8 4-4 4.8-2.2-.8-4-2.6-4-4.8v-3.5l4-1.5z" fill="#FFFFFF" />
+                  </svg>
+                </div>
+                <div class="manutencao-text">
+                  <h5>Manutenção programada para 08/11</h5>
+                  <p>O sistema de boletos dos bancos ficará instável das 07h00 às 09h00. Se precisar, acesse antes ou após esse horário.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================
+             TAB 4: PRA VOCÊ
+             =================================================== -->
+        <div class="tab-pane" id="tab-pravc">
+          <div class="tab-scroll">
+            <div class="pravc-container">
+              <h1 class="pravc-title">Pra você</h1>
+
+              <div class="vantagens-header">
+                <img src="assets/nivel5-badge.png" alt="Nível 5" />
+                <h3>Continue aproveitando o Minhas Vantagens</h3>
+              </div>
+
+              <div class="benefit-cards-stack">
+                <div class="benefit-card">
+                  <div class="benefit-logo-slot">
+                    <img src="assets/evino-logo.png" alt="Evino" />
+                  </div>
+                  <div class="benefit-info">
+                    <h4>Evino</h4>
+                    <p>Cupom de desconto</p>
+                  </div>
+                </div>
+
+                <div class="benefit-card">
+                  <div class="benefit-logo-slot"></div>
+                  <div class="benefit-info">
+                    <h4>Farmácias e exames</h4>
+                    <p>Economize 70%</p>
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" class="btn-outline-navy">Conferir todos os benefícios</button>
+
+              <!-- Horizontal Carousel -->
+              <div class="quick-actions-scroll">
+                <div class="quick-action-item">
+                  <div class="quick-action-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7" stroke-linejoin="round">
+                      <path d="M5 7h14l1 13H4L5 7z"/>
+                      <path d="M9.5 10a2.5 2.5 0 0 0 5 0"/>
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Itaú Shop</span>
+                </div>
+
+                <div class="quick-action-item">
+                  <div class="quick-action-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7" stroke-linejoin="round">
+                      <polygon points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5" />
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Minhas<br/>Vantagens</span>
+                </div>
+
+                <div class="quick-action-item">
+                  <div class="quick-action-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.6">
+                      <rect x="4" y="6" width="3.5" height="3.5" rx="0.8"/>
+                      <rect x="10" y="6" width="3.5" height="3.5" rx="0.8"/>
+                      <rect x="16" y="6" width="3.5" height="3.5" rx="0.8"/>
+                      <rect x="4" y="13" width="3.5" height="3.5" rx="0.8"/>
+                      <rect x="10" y="13" width="3.5" height="3.5" rx="0.8"/>
+                      <line x1="17.8" y1="12.5" x2="17.8" y2="17"/>
+                      <line x1="15.5" y1="14.8" x2="20" y2="14.8"/>
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Pontos</span>
+                </div>
+
+                <div class="quick-action-item">
+                  <div class="quick-action-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7" stroke-linejoin="round">
+                      <rect x="3" y="6" width="11" height="10" rx="1"/>
+                      <path d="M14 9h4l3 3v4h-7V9z"/>
+                      <circle cx="7.5" cy="17.5" r="2" fill="#FFF"/>
+                      <circle cx="17.5" cy="17.5" r="2" fill="#FFF"/>
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Minhas<br/>compras</span>
+                </div>
+
+                <div class="quick-action-item">
+                  <div class="quick-action-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.7">
+                      <path d="M12 2l2.4 2.2 3.2-.4.8 3.1 2.8 1.6-1.3 2.9 1.3 2.9-2.8 1.6-.8 3.1-3.2-.4L12 21l-2.4-2.2-3.2.4-.8-3.1-2.8-1.6 1.3-2.9-1.3-2.9 2.8-1.6.8-3.1 3.2.4L12 2z"/>
+                      <line x1="9.5" y1="14.5" x2="14.5" y2="9.5"/>
+                    </svg>
+                  </div>
+                  <span class="quick-action-label">Combinaqui</span>
+                </div>
+              </div>
+
+              <!-- Ofertas da semana Card -->
+              <div class="ofertas-card">
+                <div class="ofertas-top">
+                  <div class="ofertas-bag-circle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8" stroke-linejoin="round">
+                      <path d="M5 7h14l1 13H4L5 7z"/>
+                      <path d="M9.5 10a2.5 2.5 0 0 0 5 0"/>
+                    </svg>
+                  </div>
+                  <div class="ofertas-right">
+                    <span class="ofertas-pill">Ofertas da semana</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+                  </div>
+                </div>
+                <div class="ofertas-spinner"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================
+             TAB 5: MENU
+             =================================================== -->
+        <div class="tab-pane" id="tab-menu">
+          <div class="tab-scroll">
+            <div class="menu-container">
+              <div class="menu-search-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A3A3C" stroke-width="1.9" stroke-linecap="round">
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="20" y1="20" x2="16" y2="16" />
+                </svg>
+                <input type="text" placeholder="O que você procura?" />
+              </div>
+
+              <div class="menu-grid-2x2">
+                <div class="menu-card">
+                  <div>
+                    <svg width="30" height="30" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="4" y="6" width="20" height="14" rx="3" />
+                      <line x1="8" y1="11" x2="10.5" y2="11" />
+                    </svg>
+                  </div>
+                  <span class="menu-card-title">Cartões</span>
+                </div>
+
+                <div class="menu-card">
+                  <div>
+                    <svg width="30" height="30" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 5H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 23h11a2.5 2.5 0 0 0 2.5-2.5V12" />
+                      <path d="M13 12c-1-.7-3-.4-3 1 0 1.5 3.5 1.3 3.5 2.8 0 1.2-2 1.5-3 .8M11.8 10v8" />
+                      <line x1="20.5" y1="3.5" x2="20.5" y2="10.5" />
+                      <line x1="17" y1="7" x2="24" y2="7" />
+                    </svg>
+                  </div>
+                  <span class="menu-card-title">Crédito</span>
+                </div>
+
+                <div class="menu-card">
+                  <div>
+                    <svg width="30" height="30" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linejoin="round">
+                      <path d="M6 7h16l1.5 15h-19L6 7z" />
+                      <path d="M11 11a3 3 0 0 0 6 0" />
+                    </svg>
+                  </div>
+                  <span class="menu-card-title">Itaú Shop</span>
+                </div>
+
+                <div class="menu-card">
+                  <div>
+                    <svg width="30" height="30" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M19 10c-1-2-3.5-3-6.5-3-1 0-2 .2-2.8.5L7.5 6v3.5C6.2 10.6 5.5 12 5.5 13.5H4v3.5h1.8c.6 1.2 1.6 2.2 2.7 2.8V22h3v-1.5h3V22h3v-2.5c2-1.2 3.5-3.2 3.5-5.5 0-1.6-.8-3-2-4z" />
+                      <circle cx="10" cy="12.5" r="1" fill="#FF6201" stroke="none" />
+                      <line x1="12.5" y1="9.5" x2="15.5" y2="9.5" />
+                    </svg>
+                  </div>
+                  <span class="menu-card-title">Poupança</span>
+                </div>
+              </div>
+
+              <h3 class="menu-section-title">Aproveite mais o Itaú</h3>
+
+              <div class="menu-grid-2x2">
+                <div class="menu-card">
+                  <div>
+                    <svg width="30" height="30" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="6" x2="21" y2="6" />
+                      <path d="M7 6v14a2.5 2.5 0 0 0 2.5 2.5h7A2.5 2.5 0 0 0 19 20V6" />
+                      <line x1="10.5" y1="11" x2="15.5" y2="11" />
+                      <line x1="10.5" y1="15" x2="15.5" y2="15" />
+                    </svg>
+                  </div>
+                  <span class="menu-card-title">Comprovantes</span>
+                </div>
+
+                <div class="menu-card">
+                  <div>
+                    <svg width="30" height="30" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9 6H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h2" />
+                      <path d="M17 6h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2" />
+                    </svg>
+                  </div>
+                  <span class="menu-card-title">Seguros e planos</span>
+                </div>
+
+                <div class="menu-card">
+                  <div>
+                    <svg width="30" height="30" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linejoin="round">
+                      <polygon points="14 4 22 8.5 22 17.5 14 22 6 17.5 6 8.5" />
+                    </svg>
+                  </div>
+                  <span class="menu-card-title">Minhas Vantagens</span>
+                </div>
+
+                <div class="menu-card">
+                  <div>
+                    <svg width="30" height="30" viewBox="0 0 28 28" fill="none" stroke="#FF6201" stroke-width="1.9" stroke-linecap="round">
+                      <circle cx="14" cy="14" r="9" />
+                      <polyline points="14 9 14 14 17 16" />
+                    </svg>
+                  </div>
+                  <span class="menu-card-title">Investimentos</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================
+             BOTTOM NAVIGATION BAR
+             =================================================== -->
+        <nav class="bottom-nav" aria-label="Menu Principal">
+          <button type="button" class="nav-item active" data-tab="home" onclick="switchAppTab('home')">
+            <div class="nav-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+                <path d="M4 10.5L12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1v-8.5z" />
+              </svg>
+            </div>
+            <span class="nav-label">Início</span>
+          </button>
+
+          <button type="button" class="nav-item" data-tab="extrato" onclick="switchAppTab('extrato')">
+            <div class="nav-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+                <circle cx="5" cy="7" r="1.1" fill="currentColor" stroke="none"/>
+                <circle cx="5" cy="12" r="1.1" fill="currentColor" stroke="none"/>
+                <circle cx="5" cy="17" r="1.1" fill="currentColor" stroke="none"/>
+                <line x1="9" y1="7" x2="19" y2="7" />
+                <line x1="9" y1="12" x2="19" y2="12" />
+                <line x1="9" y1="17" x2="19" y2="17" />
+              </svg>
+            </div>
+            <span class="nav-label">Extrato</span>
+          </button>
+
+          <button type="button" class="nav-item" data-tab="pagamentos" onclick="switchAppTab('pagamentos')">
+            <div class="nav-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="9.5" x2="19" y2="9.5" />
+                <polyline points="15 5.5 19 9.5 15 13.5" />
+                <line x1="19" y1="14.5" x2="5" y2="14.5" />
+                <polyline points="9 10.5 5 14.5 9 18.5" />
+              </svg>
+            </div>
+            <span class="nav-label">Pagamentos</span>
+          </button>
+
+          <button type="button" class="nav-item" data-tab="pravc" onclick="switchAppTab('pravc')">
+            <div class="nav-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+                <rect x="3.5" y="8" width="17" height="4" rx="1" />
+                <path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7" />
+                <line x1="12" y1="8" x2="12" y2="20" />
+                <path d="M12 8H8.5a2 2 0 1 1 0-4C11 4 12 8 12 8z" />
+                <path d="M12 8h3.5a2 2 0 1 0 0-4C13 4 12 8 12 8z" />
+              </svg>
+            </div>
+            <span class="nav-label">Pra você</span>
+          </button>
+
+          <button type="button" class="nav-item" data-tab="menu" onclick="switchAppTab('menu')">
+            <div class="nav-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="4" y="4" width="6.5" height="6.5" rx="1.2" />
+                <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2" />
+                <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2" />
+                <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2" />
+              </svg>
+            </div>
+            <span class="nav-label">Menu</span>
+          </button>
+        </nav>
+
+        <div class="ios-home-indicator-wrap" style="background:#FFFFFF;">
+          <div class="ios-home-indicator"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
